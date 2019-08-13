@@ -96,7 +96,7 @@ function updateQuantity(id) {
             'Content-Type': 'application/json'
         },
         'type': 'POST',
-        'url':'/products/updateQuantity',
+        'url':'/products/updateCart',
         'data': JSON.stringify(productUtil),
         'dataType': 'json'
 
