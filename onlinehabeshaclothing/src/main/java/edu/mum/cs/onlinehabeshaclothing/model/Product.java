@@ -13,7 +13,6 @@ import javax.persistence.*;
 
 @Data
 @RequiredArgsConstructor
-@Getter
 @Entity
 public class Product {
 
@@ -25,21 +24,7 @@ public class Product {
     private double price;
     private int quantity;
     private boolean approve;
-//    @Lob
-//    @Basic(fetch = FetchType.LAZY)
-//    @Nullable
-//    private byte[] image;
-
     @Transient
     private MultipartFile productImage;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Nullable
-    private String imageStr;
-
-
-//    public byte[] getImage() {
-//        return image;
-//    }
 }
