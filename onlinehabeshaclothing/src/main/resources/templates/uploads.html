@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>uploading file</title>
+<link rel="stylesheet" href="/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="/style.css" type="text/css" />
+</head>
+<body>
+<form id="file-upload-form">
+    <label for="file-upload-input">Select file to upload</label>
+    <input type="file" id="file-upload-input" name="file">
+    <button type="submit">Start Upload</button>
+</form>
+<script src="/jquery.js" type="application/javascript"></script>
+	<script type="application/javascript"> 
+$(document).ready(function () {
+    // bind form submit event
+    $("#file-upload-form").on("submit", function (e) {
+
+        // cancel the default behavior
+        e.preventDefault();
+
+        // use $.ajax() to upload file
+        $.ajax({
+            url: "/file-upload",
+            type: "POST",
+            data: new FormData(this),
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (res) {
+                console.log(res);
+            },
+            error: function (err) {
+                console.error(err);
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

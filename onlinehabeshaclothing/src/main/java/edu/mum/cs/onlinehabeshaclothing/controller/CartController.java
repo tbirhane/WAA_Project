@@ -49,7 +49,7 @@ public class CartController {
         long productId = orderLine.getProduct().getId();
         int quantity = orderLine.getQuantity();
 
-        Product product = productService.findById(productId);
+        Product product = productService.getProduct(productId);
         Cart cart = null;
         if(session.getAttribute("cart") == null){
             cart = new Cart();
@@ -95,7 +95,7 @@ public class CartController {
             cart = new Cart();
         }
 
-        Product product = productService.findById(productId);
+        Product product = productService.getProduct(productId);
         if(quantity > product.getQuantity()){
             model.addAttribute("msg", "There are not enough products in our store!");
             updateProduct.setQuantity(product.getQuantity());
@@ -135,7 +135,7 @@ public class CartController {
 
         long productId = removedProduct.getId();
         int quantity = removedProduct.getQuantity();
-        Product product = productService.findById(productId);
+        Product product = productService.getProduct(productId);
         Cart cart = (Cart) session.getAttribute("cart");
         cart.removeProduct(product, quantity);
         removedProduct.setTotalPrice(cart.getTotalPrice());
@@ -191,9 +191,9 @@ public class CartController {
         customerOrder.setPaymentInfo(paymentInfo);
         customerOrder.setShippingAddress(address);
         for(OrderLine line : customerOrder.getOrderLineList()) {
-            Product p = productService.findById(line.getProduct().getId());
+            Product p = productService.getProduct(line.getProduct().getId());
             p.setQuantity(p.getQuantity()-line.getQuantity());
-            productService.save(p);
+            productService.saveProduct(p);
         }
         customerOrderService.save(customerOrder);
         session.setAttribute("customerOrder",customerOrder);

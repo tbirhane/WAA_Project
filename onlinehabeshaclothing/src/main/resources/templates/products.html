@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Products</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!--<link rel="stylesheet" href="/bootstrap.min.css" media="screen" />-->
+<!--<link rel="stylesheet" href="/style.css" type="text/css" />-->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+	integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+	crossorigin="anonymous">
+<style>
+.navigation-order {
+	margin-bottom: 30px;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+	<h3>Product Directory</h3>
+	<hr>
+	
+	<!-- Add a button -->
+	
+	
+		
+		<div class="page-header" id="banner">
+			<div class="row">
+				<div class="col-lg-8 col-md-7 col-sm-6">
+					<h1>Products</h1>
+
+					<!-- <table class="table table-striped table-hover" id="tbllist">
+						<thead> -->
+					<table class="table table-bordered table-striped" >
+						<thead class="thead-dark">
+							<tr>
+
+								<th>Name</th>
+								<th>Price</th>
+								<th>More Info</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr th:each="product: ${products}">
+
+								<td th:text="${product.name}"></td>
+								<td th:text="${product.price}"></td>
+								<td><a th:href="@{/detail/{pid}(pid=${product.id})}">
+										Info</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-8 col-md-7 col-sm-6">
+					<form>
+						<p><a th:href="@{/}">upload image</a></p>
+						<div class="form-group">
+							<label for="product_name">Product Name:</label> <input
+								type="text" class="form-control"  id="product_name" />
+						</div>
+						<div class="form-group">
+							<label for="product_price">Price:</label> <input type="text"
+								class="form-control" id="product_price" />
+						</div>						
+
+						<div class="form-group">
+							<label for="product_description">Description:</label>
+							<textarea class="form-control" id="product_description"></textarea>
+						</div>
+					
+
+						<button type="submit" class="btn btn-default" id="btn_submit">Add
+							New Product</button>
+					</form>
+				</div>
+			</div>
+			<br />
+
+		</div>
+<!--		<div th:replace="fragments/footer :: footer">...</div>-->
+	</div>
+	<script src="js/jquery.js" type="application/javascript"></script>
+	<script type="application/javascript">
+		
+		
+		
+    $(document).ready(function () {
+       $('#btn_submit').on("click",function (e) {
+           e.preventDefault();
+           var productName, productPrice;
+           productName = $('#product_name').val();
+           productPrice = $('#product_price').val();
+           productImage = $('#product_image').val();
+           productDescription = $('#product_description').val();
+           if($.trim(productName) === ""){
+               alert("Product name cannot be empty");
+           }
+           else if(!$.trim($.isNumeric(productPrice))){
+               alert("Price must be numeric");
+           }
+           else {
+               var data = {};
+               data["name"] = productName;
+               data["price"] = productPrice;
+               data["productImage"] = productImage;
+               data["description"] =  productDescription;
+               $.ajax({
+                   type: "POST",
+                   contentType: "application/json",
+                   url: "/saveproduct",
+                   data: data,
+                   dataType: 'json',
+                   timeout: 6000,
+                   success: function (data) {
+                      if (confirm("Do you want the  product with Id " +data + " to be Saved?")){
+                           window.location.reload();
+                       }
+                       /*
+                 var td0=$('<td>').text(data.id);
+		         var td1 = $('<td>').text(data.name);
+		         var td2 = $('<td>').text(data.price);
+		         var tr = $('<tr>').append(td0).append(td1).append(td2);
+		         $('#tbl_products>tbody').append(tr);
+                       */
+                   }
+               });
+           }
+       });
+    });
+
+	
+	
+	</script>
+</body>
+</html>
