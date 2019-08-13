@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 
 
 @Data
@@ -19,17 +20,19 @@ public class Account {
     @GeneratedValue
     private Long id;
     @NonNull
-    private String username;
+    @Email
+    private String email;
     @NonNull
     private String password;
     @NonNull
-    private String role;
+
+
 
 
     public Account(Account account) {
-        this.username = account.getUsername();
-        this.password = account.getPassword();
-        this.role = account.getRole();
+//        this.username = account.getUsername();
+//        this.password = account.getPassword();
+//        this.role = account.getRole();
 
     }
 }
