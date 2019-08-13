@@ -9,16 +9,13 @@ import java.util.List;
 //@RequiredArgsConstructor
 public class Cart {
     private List<OrderLine> orderLines;
+    private double totalPrice;
 
     public Cart(){
         orderLines = new ArrayList<>();
     }
-    // public void addProduct(Product product, int quantity) {
-        // find an orderline in the cart containing the product
-        // if found, increase quantity
-        // otherwise, create new orderline with this product and specified quantity
 
-    //}
+
     public OrderLine addProduct(Product product, int quantity){
         OrderLine orderLine = null;
         for(OrderLine l:orderLines){
@@ -34,7 +31,7 @@ public class Cart {
             orderLines.add(orderLine);
         }
         else {
-            orderLine.setQuantity(orderLine.getQuantity()+quantity);
+            orderLine.setQuantity(quantity);
         }
         return orderLine;
     }

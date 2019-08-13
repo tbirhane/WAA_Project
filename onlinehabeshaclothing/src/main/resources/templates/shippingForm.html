@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shipping Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/mycss.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/script.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="header-container">
+    <a th:href="@{/home}">home</a>
+    <a th:href="@{/contact}">contact</a>
+    <a th:href="@{/products/cartItems}"> <img id="cart-img" src="/images/cart.png"/> </a>
+
+</div>
+
+<h3>Shipping Address</h3>
+<form id="shippingAddressForm">
+    <pre>
+    <label>Street:</label>
+    <input type="text" name="street" value=""/>
+    <label>City:</label>
+    <input type="text" name="city" value=""/>
+    <label>State:</label>
+    <input type="text" name="state" value=""/>
+    <label>Zip:</label>
+    <input type="text" name="zip" value=""/>
+    <input type="button" value="Continue" id="address-btn">
+    </pre>
+</form>
+
+<form id="paymentIfoForm">
+    <fieldset>
+        <legend>Card Type: </legend>
+        <label for="visa"> Visa </label><input type="radio" name="type" value="" id="visa"/>
+        <label for="master-card"> Master Card </label><input type="radio" name="type" value="" id="master-card"/>
+        <label for="discover"> Discover </label><input type="radio" name="type" value="" id="discover"/>
+    </fieldset>
+    <pre>
+    <label>Card Number:</label>
+    <input type="text" name="cardNumber" value=""/>
+    <label>Expiration Date:</label>
+    <input type="date" name="expireDate" value=""/>
+    <input type="button" value="Confirm" id="payment-btn">
+    </pre>
+</form>
+
+
+</body>
+</html>

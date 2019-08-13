@@ -31,7 +31,6 @@ public class Product {
     @Transient
     private MultipartFile productImage;
 
-
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Nullable
