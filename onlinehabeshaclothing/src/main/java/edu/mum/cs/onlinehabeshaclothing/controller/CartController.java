@@ -167,10 +167,10 @@ public class CartController {
         return "shippingForm";
     }
 
-    @PostMapping(value = "checkout")
-    public String addShippingAddress(Address address, HttpSession session){
+    @PostMapping(value = "checkout", consumes = "application/json", produces = "application/json")
+    public @ResponseBody Address addShippingAddress(@RequestBody Address address, HttpSession session){
         session.setAttribute("shippingAddres",address);
-        return "redirect:paymentInfo";
+        return address;
     }
 
     @GetMapping(value = "paymentInfo")
@@ -179,7 +179,7 @@ public class CartController {
     }
 
     @PostMapping(value = "paymentInfo")
-    public String addPayment(PaymentInfo paymentInfo, HttpSession session){
+    public @ResponseBody PaymentInfo addPayment(@RequestBody PaymentInfo paymentInfo, HttpSession session){
 
         session.setAttribute("paymentInfo",paymentInfo);
 
@@ -206,7 +206,14 @@ public class CartController {
         session.setAttribute("shippingAddress", new Address());
         session.setAttribute("total",0.0);
         //session.invalidate();
-        return "redirect:/products/orderlist";
+      //  return "redirect:/products/orderlist";
+        return paymentInfo;
+    }
+    @GetMapping("orderConfirmation")
+    public String orderConfirmation(Model model, HttpSession session){
+        CustomerOrder order = (CustomerOrder)session.getAttribute("customerOrder");
+        model.addAttribute("customerOrder",order);
+        return "orderConfirmation";
     }
 
 //    @PostMapping(value = "placeOrder")

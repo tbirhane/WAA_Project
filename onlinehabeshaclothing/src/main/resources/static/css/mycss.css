@@ -46,7 +46,7 @@ a{
     font-size: 20px;
 }
 #cart-img{
-    float: right;
+
     margin: 5px;
     width: 40px;
     height: 40px;
@@ -60,4 +60,12 @@ a{
 .btn-danger{
     float: right;
 
+}
+.hide{
+    visibility: hidden;
+}
+.cart{
+    float: right;
+    top: 0px;
+    right: 0px;
 }

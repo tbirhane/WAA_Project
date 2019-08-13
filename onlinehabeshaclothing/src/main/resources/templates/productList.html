@@ -17,8 +17,8 @@
     <div id="header-container">
         <a th:href="@{/home}">home</a>
         <a th:href="@{/contact}">contact</a>
-        <a th:href="@{/products/cartItems}"> <img id="cart-img" src="/images/cart.png"/> </a>
-        <span id="item-count" th:text="${amount}"></span>
+        <a th:href="@{/products/cartItems}" class="cart"> <img  id="cart-img" src="/images/cart.png"/> </a>
+        <span class="cart" id="item-count" th:text="${amount}"></span>
 
     </div>
 

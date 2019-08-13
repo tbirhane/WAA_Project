@@ -122,30 +122,54 @@ function updateQuantity(id) {
 }
 
 //continue here
-function checkout(){
+function shippingAddress(){
     let shippingAddress = JSON.stringify($('#shippingAddressForm').serializeFormJSON());
+    console.log("initial add = "+shippingAddress);
     $.ajax({
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         'type': 'POST',
-        'url':'/products/updateQuantity',
-        'data': JSON.stringify(shippingAddress),
+        'url':'/products/checkout',
+        'data': shippingAddress,
         'dataType': 'json'
 
     }).done(addressSuccess).fail(fail);
 
     function addressSuccess(data) {
         console.log(data);
+        $('#shippingAddressForm').remove();
+        $('#paymentIfoForm').removeClass("hide");
+
+    }
+}
+
+function processPayment() {
+    let paymentInfo = JSON.stringify($('#paymentIfoForm').serializeFormJSON());
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        'type': 'POST',
+        'url':'/products/paymentInfo',
+        'data': paymentInfo,
+        'dataType': 'json'
+
+    }).done(paymentSuccess).fail(fail);
+    function paymentSuccess(data) {
+        console.log("payment: "+ data);
+        window.location = '/products/orderConfirmation';
     }
 
 }
+
 function  fail() {
     alert("fail");
 }
 
 $(function () {
-    $('#address-btn').click(checkout);
-
+    $('#address-btn').click(shippingAddress);
+    $('#payment-btn').click(processPayment);
 });
