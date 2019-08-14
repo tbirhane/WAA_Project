@@ -15,7 +15,6 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @Entity
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +23,10 @@ public class Product {
     private double price;
     private int quantity;
     private boolean approve;
+    @ManyToOne
+    private User user;
     @Transient
     private MultipartFile productImage;
+    private String fileName;
 
 }

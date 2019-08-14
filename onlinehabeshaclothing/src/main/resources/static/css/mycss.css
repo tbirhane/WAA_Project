@@ -3,19 +3,22 @@ body{
     background-color:  #F8F8F8;
 }
 #main-container{
+    background-image: url("/resources/images/habesha1.jpg");
     margin: 20px;
 }
 #product-container{
+
     width: 75%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     float: left;
-    /*background-image: url("/resources/images/mobile.png");*/
+    /*background-image: url("/resources/images/habesha1.jsp");*/
     box-sizing: content-box;
     clear: right;
 }
 .products{
+    margin: 20px;
     border: 1px solid #333;
     background-color: #f1f1f1;
     border-radius: 5px;
@@ -68,4 +71,27 @@ a{
     float: right;
     top: 0px;
     right: 0px;
+}
+#main-order-confirmation{
+    display: flex;
+
+    margin: 20px;
+    padding: 15px;
+
+}
+.order-confirmation{
+    margin: 20px;
+}
+.total-price{
+    text-align: center;
+    color: #ff001e;
+
+}
+.red{
+    color: red;
+}
+.green{
+    text-align: center;
+    color: green;
+
 }

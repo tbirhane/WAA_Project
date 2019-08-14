@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Maintain Order</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/mycss.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/script.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="header-container">
+    <a th:href="@{/home}">home</a>
+    <a th:href="@{/contact}">contact</a>
+    <a th:href="@{/cart/cartItems}" class="cart"> <img  id="cart-img" src="/images/cart.png"/> </a>
+
+</div>
+
+<div id="order-history">
+    <hr/>
+
+       <div th:each="order: ${orderHistory}" class="products">
+           <h4 th:text="${order.id}"></h4>
+           <p th:text="${order.orderDate}"></p>
+           <p th:text="${order.orderStatus}"></p>
+           <p th:text="${order.shippingAddress.city}"></p>
+           <p th:text="${order.shippingAddress.zip}"></p>
+<!--           <input type="text" name="quantity" th:id="${order.id}" class="quantity-form" value="1" onchange="createButton(this.id)"/>-->
+           <button class="btn btn-danger" th:id="${order.id}" onclick="cancelOrder(this.id)"> Cancel Order </button>
+
+       </div>
+
+
+</div>
+
+</body>
+</html>

@@ -7,48 +7,53 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/mycss.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
     <script src="/js/script.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="header-container">
     <a th:href="@{/home}">home</a>
     <a th:href="@{/contact}">contact</a>
-    <a th:href="@{/products/cartItems}" class="cart"> <img  id="cart-img" src="/images/cart.png"/> </a>
+    <a th:href="@{/cart/cartItems}" class="cart"> <img  id="cart-img" src="/images/cart.png"/> </a>
 
 
 </div>
+<div id="main-order-confirmation">
 
-    <p>
-        <label>OrderDate:</label> <span th:text="${customerOrder.orderDate}"></span>
-    </p>
-    <p>
-
-        <label> OrderNumber: </label> <span th:text="${customerOrder.id}"></span>
-    </p>
-
-<fieldset class="scheduler-border">
-    <legend class="scheduler-border">ShippingAddress</legend>
-    <div class="control-group">
-        <div class="controls bootstrap-timepicker">
-            <label>Street :</label>  <span th:text="${customerOrder.shippingAddress.street}"> </span>
-            <i class="icon-time"></i>
-        </div>
-        <div class="controls bootstrap-timepicker">
-            <label>City : </label><span th:text="${customerOrder.shippingAddress.city}"> </span>
-            <i class="icon-time"></i>
-        </div>
-        <div class="controls bootstrap-timepicker">
-            <label>State :</label> <span th:text="${customerOrder.shippingAddress.state}"> </span>
-            <i class="icon-time"></i>
-        </div>
-        <div class="controls bootstrap-timepicker">
-            <label>Zip: </label> <span th:text="${customerOrder.shippingAddress.zip}"> </span>
-            <i class="icon-time"></i>
-        </div>
-
+    <div class="order-confirmation">
+        <p>
+            <label>OrderDate:</label> <span th:text="${customerOrder.orderDate}"></span>
+        </p>
+        <p>
+            <label> OrderNumber: </label> <span th:text="${customerOrder.id}"></span>
+        </p>
     </div>
-</fieldset>
+    <div class="order-confirmation">
+    <fieldset class="scheduler-border">
+        <legend class="scheduler-border">ShippingAddress</legend>
+        <div class="control-group">
+            <div class="controls bootstrap-timepicker">
+                <label>Street :</label>  <span th:text="${customerOrder.shippingAddress.street}"> </span>
+                <i class="icon-time"></i>
+            </div>
+            <div class="controls bootstrap-timepicker">
+                <label>City : </label><span th:text="${customerOrder.shippingAddress.city}"> </span>
+                <i class="icon-time"></i>
+            </div>
+            <div class="controls bootstrap-timepicker">
+                <label>State :</label> <span th:text="${customerOrder.shippingAddress.state}"> </span>
+                <i class="icon-time"></i>
+            </div>
+            <div class="controls bootstrap-timepicker">
+                <label>Zip: </label> <span th:text="${customerOrder.shippingAddress.zip}"> </span>
+                <i class="icon-time"></i>
+            </div>
 
+        </div>
+    </fieldset>
+    </div>
+
+    <div class="order-confirmation">
     <fieldset class="scheduler-border">
         <legend class="scheduler-border">Payment Infromation</legend>
         <div class="control-group">
@@ -62,22 +67,41 @@
             </div>
         </div>
     </fieldset>
-
-    <div th:each="order: ${customerOrder.orderLineList}">
-<!--<c:forEach var="order" items="${customerOrder.orderLineList}">-->
-    <p>
-        <label>Product Name: </label> <span th:text="${order.product.name}"></span>
-    </p>
-
-        <p>
-    <label>Product Price: </label> <span th:text="${order.product.price}"></span>
-        </p>
-        <p>
-    <label>Product Quantiy: </label> <span th:text="${order.quantity}"></span>
-        </p>
-
-
-<!--</c:forEach>-->
     </div>
+
+    <div class="order-confirmation">
+        <div th:each="order: ${customerOrder.orderLineList}">
+            <fieldset>
+
+            <p>
+                <label>Product Name: </label> <span th:text="${order.product.name}"></span>
+            </p>
+
+                <p>
+            <label>Product Price: </label> <span th:text="${order.product.price}"></span>
+                </p>
+                <p>
+            <label>Product Quantiy: </label> <span th:text="${order.quantity}"></span>
+                </p>
+
+            </fieldset>
+
+        </div>
+    </div>
+<!--    <form th:action="@{/cart/placeOrder}" method="GEt">-->
+<!--        <input class="btn btn-primary" type="submit" value="Place Order">-->
+<!--    </form>-->
+
+    <div class="total-price">
+        <span>Total price: $</span> <span th:text="${totalPrice}"></span>
+
+        <!--    <p th:text="${msg}"></p>-->
+    </div>
+
+</div>
+<div class="green">
+    <button class="btn btn-primary" th:id="placeOrderBtn">Place Order</button>
+<!--    <p th:text="${msg}"></p>-->
+</div>
 </body>
 </html>

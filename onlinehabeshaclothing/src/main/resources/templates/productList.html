@@ -17,10 +17,11 @@
     <div id="header-container">
         <a th:href="@{/home}">home</a>
         <a th:href="@{/contact}">contact</a>
-        <a th:href="@{/products/cartItems}" class="cart"> <img  id="cart-img" src="/images/cart.png"/> </a>
+        <a th:href="@{/cart/cartItems}" class="cart"> <img  id="cart-img" src="/images/cart.png"/> </a>
         <span class="cart" id="item-count" th:text="${amount}"></span>
 
     </div>
+    <p th:text="${msg}? ${msg}:' '"></p>
 
     <h4>Products currently in the shop</h4>
     <div id="main-container">
@@ -33,7 +34,7 @@
                     <p th:text="${product.quantity}"></p>
                     <p th:text="${product.price}"></p>
 <!--                    <input type="text" name="quantity" class="form-control" value="1">-->
-                    <button class="btn btn-info" th:id="${product.id}" onclick="addToCart(this.id)"> Add To Cart</button>
+                    <button class="btn btn-warning" th:id="${product.id}" onclick="addToCart(this.id)"> Add To Cart</button>
                 </div>
 <!--            </c:forEach>-->
         </div>

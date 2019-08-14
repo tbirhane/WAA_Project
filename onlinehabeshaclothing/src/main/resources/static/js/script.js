@@ -46,7 +46,7 @@ function addToCart(clicked_id) {
             'Content-Type': 'application/json'
         },
         'type': 'POST',
-        'url':'/products/selectItem',
+        'url':'/cart/selectItem',
         'data': JSON.stringify(product),
         'dataType': 'json'
 
@@ -55,6 +55,7 @@ function addToCart(clicked_id) {
 
     function saveToCart(data){
         console.log(data);
+        $('#'+id).prop("disabled",true);
     }
 }
 // increment number of products in cart
@@ -96,7 +97,7 @@ function updateQuantity(id) {
             'Content-Type': 'application/json'
         },
         'type': 'POST',
-        'url':'/products/updateCart',
+        'url':'/cart/updateCart',
         'data': JSON.stringify(productUtil),
         'dataType': 'json'
 
@@ -121,7 +122,7 @@ function updateQuantity(id) {
 
 }
 
-//continue here
+//shipping address submission
 function shippingAddress(){
     let shippingAddress = JSON.stringify($('#shippingAddressForm').serializeFormJSON());
     console.log("initial add = "+shippingAddress);
@@ -131,7 +132,7 @@ function shippingAddress(){
             'Content-Type': 'application/json'
         },
         'type': 'POST',
-        'url':'/products/checkout',
+        'url':'/cart/checkout',
         'data': shippingAddress,
         'dataType': 'json'
 
@@ -153,23 +154,103 @@ function processPayment() {
             'Content-Type': 'application/json'
         },
         'type': 'POST',
-        'url':'/products/paymentInfo',
+        'url':'/cart/paymentInfo',
         'data': paymentInfo,
         'dataType': 'json'
 
     }).done(paymentSuccess).fail(fail);
     function paymentSuccess(data) {
         console.log("payment: "+ data);
-        window.location = '/products/orderConfirmation';
+        window.location = '/cart/orderConfirmation';
     }
 
+}
+
+function placeOrder() {
+    let order = {
+        id:1,
+        orderDate: "11-12-13",
+        orderStatus:"SHIPPED"
+    }
+
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        'type': 'POST',
+        'url':'/cart/placeOrder',
+        'data': JSON.stringify(order),
+        'dataType': 'json'
+
+    }).done(placeOrdeSuccess).fail(fail);
+    function placeOrdeSuccess(data) {
+        console.log(data);
+        $('#placeOrderBtn').parent().append($('<p>').text("Thank you for shopping with us!"));
+        $('#placeOrderBtn').parent().append($('<button>')
+            .attr("id","downloadReceiptBtn")
+            .attr("onclick", "downloadReceipt()")
+            .addClass("btn btn-primary").text("Download Receipt"));
+        $('#placeOrderBtn').remove();
+    }
+}
+
+//cancel order
+
+function cancelOrder(order_id){
+    let order = {
+        id:order_id,
+        orderDate: $('#'+order_id).siblings()[1].innerText,
+        orderStatus:$('#'+order_id).siblings()[2].innerText
+    }
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        'type': 'POST',
+        'url':'/cart/cancelOrder',
+        'data': JSON.stringify(order),
+        'dataType': 'json'
+
+    }).done(cancelOrderSuccess).fail(fail);
+    function cancelOrderSuccess(data) {
+        let p = $('#'+data.id).parent();
+        if(data.orderStatus == 'SHIPPED'){
+            p.append($('<p>').text("Product already Shipped!").addClass("red"));
+            $('#'+data.id).prop("disabled",true);
+        }else{
+
+            p.remove();
+        }
+
+    }
+}
+
+function downloadReceipt() {
+    console.log("*************** Download ****************");
+    let specialElementHandlers = {
+        "#editor": function (element, renderer) {
+            return true;
+        }
+    };
+    let doc = new jsPDF();
+    console.log(doc);
+    doc.fromHTML($('#main-order-confirmation').html(), 15, 15, {
+        "width": 150,
+        "elementHandlers": specialElementHandlers
+    });
+    doc.save('order-receipt.pdf');
+    console.log("doc = "+doc);
 }
 
 function  fail() {
     alert("fail");
 }
 
+//on page load
 $(function () {
     $('#address-btn').click(shippingAddress);
     $('#payment-btn').click(processPayment);
+    $('#placeOrderBtn').click(placeOrder);
 });

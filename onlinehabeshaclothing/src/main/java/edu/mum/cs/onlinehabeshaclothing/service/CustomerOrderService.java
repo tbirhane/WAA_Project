@@ -36,4 +36,10 @@ public class CustomerOrderService implements ICustomerOrderService {
     public void delete(CustomerOrder customerOrder) {
         customerOrderRepository.delete(customerOrder);
     }
+
+    @Override
+    public List<CustomerOrder> findAllOrdersByUserId(Long id) {
+        return customerOrderRepository.findAllOrdersByUserId(id);
+    }
+
 }

@@ -2,7 +2,7 @@ package edu.mum.cs.onlinehabeshaclothing.controller;
 
 import edu.mum.cs.onlinehabeshaclothing.model.Cart;
 import edu.mum.cs.onlinehabeshaclothing.model.Product;
-import edu.mum.cs.onlinehabeshaclothing.service.IProductService;
+
 import edu.mum.cs.onlinehabeshaclothing.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

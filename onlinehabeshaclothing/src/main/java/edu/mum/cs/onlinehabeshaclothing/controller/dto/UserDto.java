@@ -2,7 +2,6 @@ package edu.mum.cs.onlinehabeshaclothing.controller.dto;
 
 
 import edu.mum.cs.onlinehabeshaclothing.constraint.FieldMatch;
-import edu.mum.cs.onlinehabeshaclothing.model.Account;
 import edu.mum.cs.onlinehabeshaclothing.model.Address;
 import edu.mum.cs.onlinehabeshaclothing.model.Cart;
 import edu.mum.cs.onlinehabeshaclothing.model.CustomerOrder;
@@ -52,9 +51,6 @@ public class UserDto {
 
     @Valid
     private Address address;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private Account account;
 
     @NotNull
     private String role;
