@@ -155,8 +155,10 @@ public class CartController {
     @GetMapping(value = "checkout")
     public String checkOut(HttpSession session, Principal principal) {
         if(session.getAttribute("buyer")==null){
+
             User user = userService.findByEmail(principal.getName());
             session.setAttribute("buyer", user);//current user as a Buyer
+            System.out.println("*****************" + user.getId());
         }
         System.out.println("checkout");
         return "shippingForm";
@@ -224,12 +226,20 @@ public class CartController {
     }
 
     @GetMapping("orderHistory")
-    public String orderHistory(Model model, HttpSession session){
+    public String orderHistory(Model model, HttpSession session, Principal principal){
         //to be modified when user is set :
         /***replace it with the following code.
          * ustomerOrderService.findAllOrdersByUserId(id)
          * */
+        System.out.println("Order History");
+        if(session.getAttribute("buyer")==null){
+            System.out.println("Order History22");
+            User user = userService.findByEmail(principal.getName());
+            session.setAttribute("buyer", user);//current user as a Buyer
+            System.out.println("Order history *****************" + user.getId());
+        }
         User buyer = (User) session.getAttribute("buyer");
+        System.out.println("IDD == "+buyer.getId());
         model.addAttribute("orderHistory",customerOrderService.findAllOrdersByUserId(buyer.getId()));
         return "maintainOrder";
     }

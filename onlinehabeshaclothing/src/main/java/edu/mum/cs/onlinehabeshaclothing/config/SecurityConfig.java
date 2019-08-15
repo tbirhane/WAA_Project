@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/css/**",
                         "/img/**","/images/**",
                         "/webjars/**","/h2-console/**"
-                ,"/", "/login","/login-error", "/registration", "/h2-console/**","/productsList","/cart/selectItem"
+                ,"/", "/login","/login-error", "/registration", "/h2-console/**","/productsList","/cart/orderHistory","/cart/selectItem"
                         ,"/cart/updateCart","/cart/cartItems",
                         "/buyer/products/detail"
 
@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/products/**").hasAuthority("ADMIN")
                 .antMatchers("/seller/**").hasAuthority("SELLER")
                 .antMatchers("/cart/checkout**","/follow**",
-                        "/buyer/products/review","/cart/placeOrder**","/cart/orderHistory**"
+                        "/buyer/products/review","/cart/placeOrder**"
                 ).hasAuthority("BUYER")
 
                 .anyRequest().authenticated()

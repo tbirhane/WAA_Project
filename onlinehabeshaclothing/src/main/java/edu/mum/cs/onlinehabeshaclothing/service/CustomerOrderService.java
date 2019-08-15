@@ -24,7 +24,7 @@ public class CustomerOrderService implements ICustomerOrderService {
 
     @Override
     public List<CustomerOrder> findAll() {
-        return customerOrderRepository.findAll();
+        return (List<CustomerOrder>) customerOrderRepository.findAll();
     }
 
     @Override

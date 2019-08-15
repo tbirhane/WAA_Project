@@ -87,6 +87,13 @@ public class ProductController {
     }
     @RequestMapping(value = "/seller/products", method = RequestMethod.GET)
     public String productsList(Model model) {
+        List<Product> plist=productService.getProducts();
+        List<Product> proList = new ArrayList<Product>();
+        for (Product p :plist) {
+            if ((p.getUser().getId()!=null)&& p.getUser().getId()==2) {
+                proList.add(p);
+            }
+        }
         model.addAttribute("products", productService.getProducts());
         return "products";
     }
@@ -94,16 +101,19 @@ public class ProductController {
     @RequestMapping(value = "/saveproduct", method = RequestMethod.POST)
     @ResponseBody
     public String saveProduct(@RequestBody Product product) {
+
+        User user = userService.getUser(2l);
+        product.setUser(user);
         productService.saveProduct(product);
         return product.getId().toString();
     }
 
     public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/static/uploads";
 
-//    @RequestMapping("/")
-//    public String UploadPage(Model model) {
-//        return "uploadview";
-//    }
+    @RequestMapping("/uploadImage")
+    public String UploadPage(Model model) {
+        return "uploadview";
+    }
 
     @RequestMapping("/upload")
     public String upload(Model model, @RequestParam("files") MultipartFile file) {

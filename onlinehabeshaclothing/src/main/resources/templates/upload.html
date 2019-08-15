@@ -15,12 +15,9 @@
 	</div>
 
 	<div>
-		<ul>
-			<li th:each="file : ${files}">
-				<a th:href="${file}" th:text="${file}" ></a>
-			</li>
-		</ul>
+		<!--<a th:href="${file}" th:text="${file}" ></a>-->
+
 	</div>
-    <a th:href="@{/products}"  > Go to products page</a>
+    <a th:href="@{/seller/products}"  > Go to products page</a>
 </body>
 </html>
