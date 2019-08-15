@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -152,7 +153,11 @@ public class CartController {
 
 
     @GetMapping(value = "checkout")
-    public String checkOut(HttpSession session) {
+    public String checkOut(HttpSession session, Principal principal) {
+        if(session.getAttribute("buyer")==null){
+            User user = userService.findByEmail(principal.getName());
+            session.setAttribute("buyer", user);//current user as a Buyer
+        }
         System.out.println("checkout");
         return "shippingForm";
     }
@@ -173,6 +178,7 @@ public class CartController {
 
         session.setAttribute("paymentInfo",paymentInfo);
         Cart cart = (Cart) session.getAttribute("cart");
+        User buyer = (User) session.getAttribute("buyer");
         Address address = (Address) session.getAttribute("shippingAddres");
         CustomerOrder customerOrder = new CustomerOrder();
         customerOrder.setOrderDate(new Date());
@@ -180,7 +186,7 @@ public class CartController {
         customerOrder.setPaymentInfo(paymentInfo);
         customerOrder.setShippingAddress(address);
         //later replace it with actual logged in user id
-        customerOrder.setUser(userService.getUser(1l));
+        customerOrder.setUser(buyer);
 
         session.setAttribute("customerOrder",customerOrder);
      return paymentInfo;
@@ -218,12 +224,13 @@ public class CartController {
     }
 
     @GetMapping("orderHistory")
-    public String orderHistory(Model model){
+    public String orderHistory(Model model, HttpSession session){
         //to be modified when user is set :
         /***replace it with the following code.
          * ustomerOrderService.findAllOrdersByUserId(id)
          * */
-        model.addAttribute("orderHistory",customerOrderService.findAll());
+        User buyer = (User) session.getAttribute("buyer");
+        model.addAttribute("orderHistory",customerOrderService.findAllOrdersByUserId(buyer.getId()));
         return "maintainOrder";
     }
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Products currently in the shop</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/mycss.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/script.js" type="text/javascript"></script>
+    <script src="/js/review.js" type="text/javascript"></script>
+<!--    <script src="/js/billing.js" type="text/javascript"></script>-->
+</head>
+<body>
+
+
+    <div id="header-container">
+        <a th:href="@{/home}">home</a>
+        <a th:href="@{/contact}">contact</a>
+        <a th:href="@{/cart/cartItems}" class="cart"> <img  id="cart-img" src="/images/cart.png"/> </a>
+        <span class="cart" id="item-count" th:text="${amount}"></span>
+
+    </div>
+    <p th:text="${msg}? ${msg}:' '"></p>
+
+    <h4>Products currently in the shop</h4>
+    <div id="main-container">
+        <div id="product-container">
+<!--            <c:forEach var="product" items="${products}">-->
+                <div th:each="product:${products}" class="products">
+                    <img class="item-img" th:src="@{/images/{id}(id=(${product.id}))}" src="" width="50" height="50"/>
+                    <h4 th:text="${product.name}"></h4>
+                    <p th:text="${product.description}"></p>
+                    <p th:text="${product.quantity}"></p>
+                    <p th:text="${product.price}"></p>
+                    <!--                    <input type="text" name="quantity" class="form-control" value="1">-->
+                    <button class="btn btn-warning" th:id="${product.id}" onclick="addToCart(this.id)"> Add To Cart</button>
+                    <button class="btn btn-info" th:id="review-+${product.id}" onclick="review(this.id)"> review</button>
+
+                </div>
+<!--            </c:forEach>-->
+        </div>
+
+
+
+    </div>
+
+</body>
+</html>

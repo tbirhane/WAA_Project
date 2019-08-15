@@ -3,16 +3,16 @@ package edu.mum.cs.onlinehabeshaclothing.model;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-
-
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+//@RequiredArgsConstructor
 @Entity
 public class Product {
     @Id
