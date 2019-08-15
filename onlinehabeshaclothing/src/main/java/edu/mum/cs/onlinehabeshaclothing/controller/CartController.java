@@ -1,22 +1,29 @@
 package edu.mum.cs.onlinehabeshaclothing.controller;
 
 
+import edu.mum.cs.onlinehabeshaclothing.controller.dto.OrderDto;
 import edu.mum.cs.onlinehabeshaclothing.model.*;
 import edu.mum.cs.onlinehabeshaclothing.service.ICustomerOrderService;
 import edu.mum.cs.onlinehabeshaclothing.service.ProductService;
+import edu.mum.cs.onlinehabeshaclothing.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Controller
-@RequestMapping("/products/")
+@RequestMapping("/cart/")
 public class CartController {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ProductService productService;
@@ -140,29 +147,17 @@ public class CartController {
         cart.removeProduct(product, quantity);
         removedProduct.setTotalPrice(cart.getTotalPrice());
         session.setAttribute("cart",cart);
-
-//        System.out.println("Remove Item");
-//        List<OrderLine> items = (List<OrderLine>) session.getAttribute("cart");
-//        System.out.println("id = "+removedProduct.getId());
-//        //remove element
-//        double itemPrice =0.0;
-//        for(OrderLine orderLine: items){
-//            if(orderLine.getId().equals(removedProduct.getId())){
-//                itemPrice = orderLine.getQuantity()* orderLine.getProduct().getPrice();
-//                items.remove(orderLine);
-//                break;
-//            }
-//        }
-//        double subtotal = (double)session.getAttribute("total");
-//        session.setAttribute("total", subtotal - itemPrice);
-//        session.setAttribute("cart", items);
           return removedProduct;
     }
 
 
 
     @GetMapping(value = "checkout")
-    public String checkOut(HttpSession session) {
+    public String checkOut(HttpSession session, Principal principal) {
+        if(session.getAttribute("buyer")==null){
+            User user = userService.findByEmail(principal.getName());
+            session.setAttribute("buyer", user);//current user as a Buyer
+        }
         System.out.println("checkout");
         return "shippingForm";
     }
@@ -182,66 +177,91 @@ public class CartController {
     public @ResponseBody PaymentInfo addPayment(@RequestBody PaymentInfo paymentInfo, HttpSession session){
 
         session.setAttribute("paymentInfo",paymentInfo);
-
         Cart cart = (Cart) session.getAttribute("cart");
+        User buyer = (User) session.getAttribute("buyer");
         Address address = (Address) session.getAttribute("shippingAddres");
         CustomerOrder customerOrder = new CustomerOrder();
         customerOrder.setOrderDate(new Date());
         customerOrder.setOrderLineList(cart.getOrderLines());
         customerOrder.setPaymentInfo(paymentInfo);
         customerOrder.setShippingAddress(address);
+        //later replace it with actual logged in user id
+        customerOrder.setUser(buyer);
+
+        session.setAttribute("customerOrder",customerOrder);
+     return paymentInfo;
+    }
+    @PostMapping("placeOrder")
+    public @ResponseBody OrderDto placeOrder(@RequestBody OrderDto orderDto, Model model, RedirectAttributes redirectAttributes, HttpSession session){
+        System.out.println("placeorder");
+        CustomerOrder customerOrder = (CustomerOrder) session.getAttribute("customerOrder");
+
         for(OrderLine line : customerOrder.getOrderLineList()) {
             Product p = productService.getProduct(line.getProduct().getId());
             p.setQuantity(p.getQuantity()-line.getQuantity());
             productService.saveProduct(p);
         }
+
+        //for test purpose ******
+            customerOrder.setOrderStatus(OrderStatus.SHIPPED);
+
         customerOrderService.save(customerOrder);
-        session.setAttribute("customerOrder",customerOrder);
+        System.out.println("after save");
 
-        // calculate quantity
-
-
-//        session.setAttribute("cart",new ArrayList<OrderLine>());
         session.setAttribute("cart", new Cart());
         session.setAttribute("shippingAddress", new Address());
-        session.setAttribute("total",0.0);
-        //session.invalidate();
-      //  return "redirect:/products/orderlist";
-        return paymentInfo;
+        session.setAttribute("totalPrice",0.0);
+        session.invalidate();
+        return orderDto;
     }
     @GetMapping("orderConfirmation")
     public String orderConfirmation(Model model, HttpSession session){
         CustomerOrder order = (CustomerOrder)session.getAttribute("customerOrder");
+        Cart cart = (Cart) session.getAttribute("cart");
         model.addAttribute("customerOrder",order);
+        model.addAttribute("totalPrice", cart.getTotalPrice());
         return "orderConfirmation";
     }
 
-//    @PostMapping(value = "placeOrder")
-//    public String placeOrder(){
-//
-//    }
+    @GetMapping("orderHistory")
+    public String orderHistory(Model model, HttpSession session){
+        //to be modified when user is set :
+        /***replace it with the following code.
+         * ustomerOrderService.findAllOrdersByUserId(id)
+         * */
+        User buyer = (User) session.getAttribute("buyer");
+        model.addAttribute("orderHistory",customerOrderService.findAllOrdersByUserId(buyer.getId()));
+        return "maintainOrder";
+    }
 
+    @PostMapping("cancelOrder")
+    public @ResponseBody
+    OrderDto cancelOrder(@RequestBody OrderDto orderDto){
+        CustomerOrder customerOrder = customerOrderService.findById(orderDto.getId());
 
+        if(customerOrder.getOrderStatus().equals(OrderStatus.SHIPPED)){
+            orderDto.setOrderDate("Product is already shipped!");
+            return orderDto;
+        }
+        List<OrderLine> orderLineList = customerOrder.getOrderLineList();
+        //loop through the orderlines and return products to store
 
-//    @PostMapping(value = "updateCart", consumes = "application/json", produces = "application/json")
-//    public @ResponseBody
-//    Product updateCart(@RequestBody ProductUtil productInfo, HttpSession session){
-//        System.out.println("Update Item");
-//        List<Product> items = (List<Product>) session.getAttribute("cart");
-//        System.out.println("id = "+productInfo.getId());
-//        //remove element
-//        Product update = null;
-//        for(Product p: items){
-//            if(p.getId().equals(productInfo.getId())){
-//               // items.remove(p);
-//                p.setQuantity(productInfo.getQuantity());
-//                update = p;
-//                break;
-//            }
-//        }
-//
-//        session.setAttribute("cart", items);
-//        return update;
-//    }
+        for(OrderLine line: orderLineList){
+            Product returnedProduct = line.getProduct();
+            int quantity = line.getQuantity();
+            Product product = productService.getProduct(returnedProduct.getId());
+            if(product != null){
+                product.setQuantity(product.getQuantity()+quantity);
+            }else {
+
+                product = returnedProduct;
+            }
+
+            productService.saveProduct(product);
+        }
+
+        customerOrderService.delete(customerOrder);
+        return orderDto;
+    }
 
 }

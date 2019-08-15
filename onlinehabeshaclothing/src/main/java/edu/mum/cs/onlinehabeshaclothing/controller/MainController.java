@@ -31,7 +31,7 @@ public class MainController {
     public String loginError(Model model) {
         System.out.println("loginError.....");
         model.addAttribute("loginError", true);
-        return "login";
+        return "index";
     }
 
 }

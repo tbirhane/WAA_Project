@@ -41,6 +41,9 @@ function review(clicked_id) {
 
     }).done(reviewSuccess).fail(fail);
 
+    function fail() {
+        alert("fail");
+    }
 
     function reviewSuccess(data){
        console.log(data);
@@ -76,7 +79,11 @@ function followUser(clicked_id) {
     }
 
     function followSuccess(data){
-        alert("success");
+
+        let p = $("#"+id).parent();
+        p.append($('<p>').text("following"));
+        $("#"+id).remove();
+
     }
 }
 

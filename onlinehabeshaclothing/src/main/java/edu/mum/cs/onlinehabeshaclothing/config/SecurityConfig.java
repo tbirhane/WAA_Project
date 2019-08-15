@@ -25,13 +25,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-       /* //add for moment
+        /*//add for moment
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/**").permitAll();
 
         http.authorizeRequests().
-                antMatchers("/h2-console/**","/products/**").permitAll()
-                .and().authorizeRequests().antMatchers("/h2-console/**","/products/**").permitAll();
+                antMatchers("/h2-console/**","/admin/**","/buyer/**").permitAll()
+                .and().authorizeRequests().antMatchers("/h2-console/**","/admin/**","/buyer/**").permitAll();
 
         http.headers().frameOptions().disable();*/
         http.csrf().disable();
@@ -43,20 +43,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/css/**",
                         "/img/**","/images/**",
                         "/webjars/**","/h2-console/**"
-                ,"/", "/login", "/registration", "/h2-console/**").permitAll()
+                ,"/", "/login","/login-error", "/registration", "/h2-console/**","/productsList","/cart/selectItem"
+                        ,"/cart/updateCart","/cart/cartItems",
+                        "/buyer/products/detail"
 
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                        ).permitAll()
+
+                .antMatchers("/products/approve**","/products/reject**"
+                ).hasAuthority("ADMIN")
                 .antMatchers("/admin/products/**").hasAuthority("ADMIN")
                 .antMatchers("/seller/**").hasAuthority("SELLER")
-                .antMatchers("/buyer/**").hasAuthority("BUYER")
-//                .antMatchers("/buyer/**").hasAuthority("ADMIN")
+                .antMatchers("/cart/checkout**","/follow**",
+                        "/buyer/products/review","/cart/placeOrder**","/cart/orderHistory**"
+                ).hasAuthority("BUYER")
+
                 .anyRequest().authenticated()
                 .and()
 
                 .formLogin()
                 .loginPage("/login")
 
-                //.failureUrl("/login-error")
+                .failureUrl("/login-error")
 
 
                 .permitAll()
@@ -69,7 +76,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
         http.headers().frameOptions().disable();
-
 
 
 
