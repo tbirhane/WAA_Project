@@ -17,5 +17,5 @@ insert into `user` (id,email, first_name, last_name, password,role, address_id )
 insert into `user` (id,email, first_name, last_name, password,role, address_id ) values (2,'seller@mum.edu','Male','Guy','$2a$10$S2KhQp4RhIHeMO0OYpqQleBsEFZ0qoIH1MJb9xvYaKNvYl33iJx6m','SELLER',1);
 insert into `user` (id,email, first_name, last_name, password,role, address_id ) values (3,'buyer@mum.edu','Male','Guy','$2a$10$S2KhQp4RhIHeMO0OYpqQleBsEFZ0qoIH1MJb9xvYaKNvYl33iJx6m','BUYER',3);
 
-insert  into `product` (id,approve, description, name, price,quantity,user_id ) values (1, true,'LG Phone','Huawie',100,3,2), (2, true,'Honer Phone','Houner',100,3,2) , (3,false ,'Alkater phone','Alkater',150,3,2),(4,false ,'Alkater phone','Alkater',50,4,2);
+insert  into `product` (id,approve, description, name, price,quantity,user_id ) values (1, true,'While and bright color','Tilfi',100,3,2), (2, true,'Very amazing color','Gabi',100,3,2) , (3,true ,'Scarf look, sleam','Scarf',150,3,2),(4,true ,'Traditional cloth with amazing look','Gersi',50,4,2), (5,true ,'Scarf look, sleam','Scarf',150,3,2),(6,true ,'Traditional men cloth','kumta',50,4,2),(7,false ,'Scarf look, sleam','Scarf',150,3,2),(8,false ,'Traditional cloth white with amazing look','Kuta',50,4,2);
 -- , (4,false ,'Alkater phone','Alkater',50,4,3);

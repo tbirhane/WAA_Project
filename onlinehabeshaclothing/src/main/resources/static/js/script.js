@@ -191,6 +191,10 @@ function placeOrder() {
             .attr("id","downloadReceiptBtn")
             .attr("onclick", "downloadReceipt()")
             .addClass("btn btn-primary").text("Download Receipt"));
+        $('#placeOrderBtn').parent().append($('<button>')
+            .attr("id","orderHistoryBtn")
+            .attr("onclick", "orderHistoryList()")
+            .addClass("btn btn-primary").text("Order History"));
         $('#placeOrderBtn').remove();
     }
 }
@@ -224,6 +228,27 @@ function cancelOrder(order_id){
             p.remove();
         }
 
+    }
+}
+function orderHistoryList() {
+    let order = {
+        id:1,
+        orderDate: "12-12-12",
+        orderStatus:"SHIPPED"
+    }
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        'type': 'POST',
+        'url':'/cart/ordersHistory',
+        'data': JSON.stringify(order),
+        'dataType': 'json'
+
+    }).done(orderHistorySuccess).fail(fail);
+    function orderHistorySuccess(data) {
+        window.location="/cart/orderHistoryList";
     }
 }
 

@@ -53,6 +53,9 @@ function approveProduct(clicked_id) {
 
     }).done(removeProduct).fail(fail);
 
+    function fail() {
+        alert("fail");
+    }
 
     function removeProduct(data){
         let id =data.id;
@@ -97,6 +100,9 @@ function rejectProduct(clicked_id) {
 
     }).done(removeProduct).fail(fail);
 
+    function fail() {
+        alert("fail");
+    }
 
     function removeProduct(data){
         let id =data.id;

@@ -27,6 +27,11 @@
 	<p >Price: <label th:text="${product.price}"></label></p>
 	<p >Quantity: <label th:text="${product.quantity}"></label></p>
 
+
+	<div th:switch="${followStatus}">
+		<span th:case="'following'">following</span>
+		<span th:case="'follow'"><button class="btn btn-info" th:id="${product.id}" onclick="followUser(this.id)"> follow</button></span>
+	</div>
 	<!--<a th:href="@{/product/products}"> Go to products page</a>-->
 <div class=" text-center"><a th:href="@{/seller/products}"><h5>Go to products page</h5></a></div>
 </body>

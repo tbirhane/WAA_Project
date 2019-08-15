@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         user.setRole(userDto.getRole());
         user.setAddress(userDto.getAddress());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setRole((("ROLE_"+userDto.getRole().toUpperCase())));
+        user.setRole(((userDto.getRole().toUpperCase())));
         return userRepository.save(user);
     }
     @Override

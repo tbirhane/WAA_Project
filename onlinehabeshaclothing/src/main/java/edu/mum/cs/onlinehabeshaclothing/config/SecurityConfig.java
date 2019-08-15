@@ -43,15 +43,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/css/**",
                         "/img/**","/images/**",
                         "/webjars/**","/h2-console/**"
-                ,"/", "/login","/login-error", "/registration", "/h2-console/**","/productsList","/cart/orderHistory","/cart/selectItem"
+                ,"/", "/login","/login-error", "/registration", "/h2-console/**","/productsList","/cart/selectItem"
                         ,"/cart/updateCart","/cart/cartItems",
-                        "/buyer/products/detail"
+                        "/buyer/products/detail","/cart/ordersHistory**","/cart/orderHistoryList**","/cart/cancelOrder","/"
 
                         ).permitAll()
 
-                .antMatchers("/products/approve**","/products/reject**"
+                .antMatchers("/admin/products/approve","/admin/products/reject"
                 ).hasAuthority("ADMIN")
-                .antMatchers("/admin/products/**").hasAuthority("ADMIN")
+                //.antMatchers("/admin/products/**").hasAuthority("ADMIN")
                 .antMatchers("/seller/**").hasAuthority("SELLER")
                 .antMatchers("/cart/checkout**","/follow**",
                         "/buyer/products/review","/cart/placeOrder**"

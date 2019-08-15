@@ -205,7 +205,8 @@ public class CartController {
         }
 
         //for test purpose ******
-            customerOrder.setOrderStatus(OrderStatus.SHIPPED);
+           // customerOrder.setOrderStatus(OrderStatus.SHIPPED);
+          //  customerOrder.setOrderStatus(OrderStatus.ORDERED);
 
         customerOrderService.save(customerOrder);
         System.out.println("after save");
@@ -225,22 +226,23 @@ public class CartController {
         return "orderConfirmation";
     }
 
-    @GetMapping("orderHistory")
-    public String orderHistory(Model model, HttpSession session, Principal principal){
+    @PostMapping("ordersHistory")
+    public @ResponseBody ProductUtil orderHistory(@RequestBody ProductUtil productUtil, Model model, HttpSession session){
         //to be modified when user is set :
         /***replace it with the following code.
          * ustomerOrderService.findAllOrdersByUserId(id)
          * */
-        System.out.println("Order History");
-        if(session.getAttribute("buyer")==null){
-            System.out.println("Order History22");
-            User user = userService.findByEmail(principal.getName());
-            session.setAttribute("buyer", user);//current user as a Buyer
-            System.out.println("Order history *****************" + user.getId());
-        }
-        User buyer = (User) session.getAttribute("buyer");
-        System.out.println("IDD == "+buyer.getId());
-        model.addAttribute("orderHistory",customerOrderService.findAllOrdersByUserId(buyer.getId()));
+//        User buyer = (User) session.getAttribute("buyer");
+//        System.out.println("IDD == "+buyer.getId());
+        System.out.println("OrderHistory***");
+        model.addAttribute("orderHistory",customerOrderService.findAll());
+        return productUtil;
+      //  return "maintainOrder";
+    }
+
+    @GetMapping("orderHistoryList")
+    public String orderHistoryList(Model model, HttpSession session){
+        model.addAttribute("orderHistory",customerOrderService.findAll());
         return "maintainOrder";
     }
 

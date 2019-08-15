@@ -38,6 +38,14 @@ public class ProductController {
     public String showProduct(Model model, HttpSession session){
 
 
+        User user = (User) session.getAttribute("buyer");
+        if(user== null){
+            model.addAttribute("login","login");
+        }
+        /*else{
+            model.addAttribute("login", "logout");
+        }
+*/
         Cart cart = (Cart) session.getAttribute("cart");
         Integer count = 0;
         if(cart != null) count = cart.getOrderLines().size();
@@ -87,13 +95,13 @@ public class ProductController {
     }
     @RequestMapping(value = "/seller/products", method = RequestMethod.GET)
     public String productsList(Model model) {
-        List<Product> plist=productService.getProducts();
-        List<Product> proList = new ArrayList<Product>();
-        for (Product p :plist) {
-            if ((p.getUser().getId()!=null)&& p.getUser().getId()==2) {
-                proList.add(p);
-            }
-        }
+//        List<Product> plist=productService.getProducts();
+//        List<Product> proList = new ArrayList<Product>();
+//        for (Product p :plist) {
+//            if ((p.getUser().getId()!=null)&& p.getUser().getId()==2) {
+//                proList.add(p);
+//            }
+//        }
         model.addAttribute("products", productService.getProducts());
         return "products";
     }
@@ -145,14 +153,14 @@ public class ProductController {
 
     }
 
-    @PostMapping("/products/approve")
+    @PostMapping("/admin/products/approve")
     @ResponseBody
     public Product saveApproved(@RequestBody Product product){
         productService.saveProduct(product);
 
         return product;
     }
-    @PostMapping("/products/reject")
+    @PostMapping("/admin/products/reject")
     @ResponseBody
     public Product rejectApproved(@RequestBody Product product){
         productService.deleteProduct(product.getId());
