@@ -15,7 +15,6 @@ public class OrderLine {
     private Long id;
     @OneToOne
     private Product product;
-
     private int quantity;
 
 }

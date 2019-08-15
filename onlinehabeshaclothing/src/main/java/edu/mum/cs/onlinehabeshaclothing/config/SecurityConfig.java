@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -19,8 +20,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+    }
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //add for moment
+       /* //add for moment
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/**").permitAll();
 
@@ -28,30 +33,78 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers("/h2-console/**","/products/**").permitAll()
                 .and().authorizeRequests().antMatchers("/h2-console/**","/products/**").permitAll();
 
+        http.headers().frameOptions().disable();*/
+        http.csrf().disable();
+        http
+                .authorizeRequests()
+                .antMatchers(
+                        "/registration**",
+                        "/js/**",
+                        "/css/**",
+                        "/img/**","/images/**",
+                        "/webjars/**","/h2-console/**"
+                ,"/", "/login", "/registration", "/h2-console/**").permitAll()
+
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/admin/products/**").hasAuthority("ADMIN")
+                .antMatchers("/seller/**").hasAuthority("SELLER")
+                .antMatchers("/buyer/**").hasAuthority("BUYER")
+//                .antMatchers("/buyer/**").hasAuthority("ADMIN")
+                .anyRequest().authenticated()
+                .and()
+
+                .formLogin()
+                .loginPage("/login")
+
+                //.failureUrl("/login-error")
+
+
+                .permitAll()
+
+                .and()
+                .logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login?logout")
+                .permitAll();
         http.headers().frameOptions().disable();
-//
-//        http
-//                .authorizeRequests()
-//                .antMatchers(
-//                        "/registration**",
-//                        "/js/**",
-//                        "/css/**",
-//                        "/img/**",
-//                        "/webjars/**").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll()
-//
-//                .and()
-//                .logout()
-//                .invalidateHttpSession(true)
-//                .clearAuthentication(true)
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .logoutSuccessUrl("/login?logout")
-//                .permitAll();
+
+
+
+
+
+
+        //End points
+
+        /*http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
+
+        http.authorizeRequests()
+                .antMatchers("/", "/login", "/registration", "/h2-console/**").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/seller/**").hasAuthority("ROLE_SELLER")
+                .antMatchers("/buyer/**").hasAuthority("ROLE_BUYER")
+                .anyRequest().authenticated() //all other urls can be access by any authenticated role
+                .and()
+                .formLogin() //enable form login instead of basic login
+                .loginPage("/login")
+                .failureUrl("/login-error")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/")
+                .and()
+                .logout()
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .and().csrf()
+                .ignoringAntMatchers("/h2-console/**") //don't apply CSRF protection to /h2-console
+                .and()
+                .exceptionHandling().accessDeniedPage("/error/access-denied")
+               // .and().rememberMe().rememberMeParameter("remember-me").tokenRepository(tokenRepository())
+        ;
+        http.rememberMe().rememberMeParameter("remember-me").key("uniqueAndSecret");
+        http.headers().frameOptions().disable();*/
+
     }
 
     @Bean

@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,32 +22,18 @@ import java.util.List;
 
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     private String firstName;
-
-
     private String lastName;
-
     private String email;
-
     private String password;
-
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private Account account;
-
     @Transient
     private Cart cart;
-
-
     private String role;
-
-    @OneToMany
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user")
     private List<CustomerOrder> orders;
+
 }
