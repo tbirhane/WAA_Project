@@ -25,4 +25,5 @@ public class CustomerOrder {
     @OneToOne(cascade = CascadeType.ALL)
     private PaymentInfo paymentInfo;
     private OrderStatus orderStatus = OrderStatus.ORDERED;
+
 }
